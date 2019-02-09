@@ -1,11 +1,13 @@
 package uz.java.oop.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import uz.java.oop.entity.Person;
 import uz.java.oop.model.PersonForm;
+import uz.java.oop.repostory.PersonRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,12 +15,15 @@ import java.util.List;
 @Controller
 public class MainController {
 
-    private static List<Person> persons = new ArrayList<Person>();
+//    private static List<Person> persons = new ArrayList<Person>();
+//
+//    static {
+//        persons.add(new Person("Bill", "Gates"));
+//        persons.add(new Person("Steve", "Jobs"));
+//    }
 
-    static {
-        persons.add(new Person("Bill", "Gates"));
-        persons.add(new Person("Steve", "Jobs"));
-    }
+    @Autowired
+    private PersonRepository personRepository;
 
     // Inject via application.properties
     @Value("${welcome.message}")
@@ -40,7 +45,8 @@ public class MainController {
     @GetMapping(value = { "/personList" })
     public String personList(Model model) {
 
-        model.addAttribute("persons", persons);
+//        model.addAttribute("persons", persons);
+        model.addAttribute("persons", personRepository.findAll());
 
         return "personList";
     }
@@ -65,7 +71,8 @@ public class MainController {
         if (firstName != null && firstName.length() > 0 //
                 && lastName != null && lastName.length() > 0) {
             Person newPerson = new Person(firstName, lastName);
-            persons.add(newPerson);
+//            persons.add(newPerson);
+            personRepository.save(newPerson);
 
             return "redirect:/personList";
         }
