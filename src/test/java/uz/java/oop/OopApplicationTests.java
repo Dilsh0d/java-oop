@@ -1,4 +1,4 @@
-package uz.java.oop.oop;
+package uz.java.oop;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
